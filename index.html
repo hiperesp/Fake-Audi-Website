@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Carro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5;
+}
+h3 {
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+.main {
+  width: 100%;
+}
+.main div .content {
+  margin-right: auto;
+  margin-left: auto;
+}
+.content {
+  width: 100%;
+  text-align: center;
+}
+.header, .footer {
+  width: 100%;
+  height: fit-content;
+  background-image: linear-gradient(to top, rgba(215, 215, 215, 1)0px, rgba(40, 40, 40, 1)1px);
+  color: rgba(215, 215, 215, 1);
+}
+.header .logo, .footer .logo {
+  background-image: url('./img/logo-white.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  float: left;
+  cursor: pointer;
+  transition: all 1s;
+  /*
+  width: 200px;
+  padding-left: 20px;
+  padding-right: 20px;
+  */
+}
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+.header .logo:hover  > .title, .footer .logo:hover > .title {
+  opacity: 1;
+  backdrop-filter: blur(5px);
+}
+.header .logo .title, .footer .logo .title {
+  opacity: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  transition: all 1s;
+}
+.header .text, .footer .text {
+  text-align: center;
+}
+.breadcrumb {
+  float: right;
+}
+.breadcrumb-item, .breadcrumb-separator {
+  display: inline-block;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  cursor: pointer;
+}
+.breadcrumb-separator:before {
+  content: "›";
+}
+.breadcrumb-item {
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: all 1s;
+}
+.breadcrumb-item-initial {
+  text-transform: uppercase;
+}
+.breadcrumb-item:hover {
+  color: rgba(40, 40, 40, 1);
+  background-color: rgba(215, 215, 215, 1);
+}
+.breadcrumb-item-this {
+  font-weight: bold;
+}
+.spacer {
+  clear: both;
+}
+.maincontent {
+  background-color: rgba(215, 215, 215, 1);
+}
+.products {
+  padding-top: 20px;
+  margin-left: 250px;
+  transition: all 0.5s;
+}
+.product {
+  width: 250px;
+  height: 250px;
+  position: relative;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.product-image-blur {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.product-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  backdrop-filter: blur(5px);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.product-details {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  backdrop-filter: blur(0px);
+  opacity: 0;
+  transition: all 1s;
+}
+.product:hover > .product-details {
+  backdrop-filter: blur(5px);
+  background-color: rgba(215, 215, 215, 0.3);
+  visibility: visible;
+  opacity: 1;
+}
+.product-details .product-text {
+  text-align: center;
+}
+.product-price {
+  text-align: center;
+  background-color: rgba(0, 255, 0, 0.2);
+  color: rgba(40, 40, 40, 1);
+  padding-left: 5px;
+  padding-right: 5px;
+  bottom: 0;
+  position: absolute;
+  width: calc(100% - 10px);
+}
+.sidebar {
+  width: 250px;
+  margin-right: 5px;
+  height: 100%;
+  float: left;
+  text-align: left;
+  position: absolute;
+  transition: all 0.5s;
+}
+.sidebar h1, .sidebar h2 {
+  color: rgba(80, 80, 80, 1);
+  padding-left: 10px;
+  font-weight: normal;
+}
+.sidebar h1 {
+  font-size: 2em;
+}
+.sidebar h2 {
+  font-size: 1em;
+}
+ul {
+  list-style-type: none;
+  font-size: 1.5em;
+}
+li {
+  padding-left: 20px;
+  padding-right: 20px;
+  width: calc(100% - 40px);
+  background-color: rgba(215, 215, 215, 1);
+}
+li:hover {
+  background-color: rgba(200, 200, 200, 1);
+}
+li a {
+  text-decoration: none;
+  color: rgba(40, 40, 40, 1);
+}
+.noProductsFound {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  padding: 100px;
+  font-size: 1.5em;
+}
+input.pesquisar {
+  width: 100%;
+  height: 40px;
+  font-size: 1em;
+}
+    </style>
+  </head>
+  <body onload="ready();">
+    <div class="main">
+      <div class="header">
+        <div class="content">
+          <div class="logo" onclick="toggleSidebar();document.getElementById('alternate_help').innerHTML = ''">
+            <h3 class="title">Audi</h3>
+          </div>
+          <div class="breadcrumb">
+            <div class="breadcrumb-item breadcrumb-item-initial breadcrumb-item-this">Audi</div>
+            <div class="breadcrumb-separator"></div>
+            <div class="breadcrumb-item">Carros</div>
+          </div>
+          <div class="spacer"></div>
+        </div>
+      </div>
+      <div class="maincontent">
+        <div class="content" id="maincontent">
+          <div class="sidebar" style="left: 0px">
+            <div id="alternate_help">
+              <h1><span onclick="document.getElementById('click_here').innerHTML = 'Clique MAIS ACIMA'">&uarr;</a></h1>
+              <h2><span onclick="this.innerHTML = 'Clique ACIMA'" id="click_here" >Clique aqui</span> para alternar a exibição deste menu.</h2>
+            </div>
+            <br>
+            <h1>Filtrar</h1>
+            <nav>
+              <h2>Veículos</h2>
+              <ul class="searchMenu"></ul>
+            </nav>
+          </div>
+          <div class="products">
+            <div class="noProductsFound">Nenhum produto encontrado.</div>
+            <!--div class="noProductsFound" data-product-tags="PESQUISAR">Pesquisar<br><input class="pesquisar" type="text" onkeydown="return alphaOnly(event);" onkeyup="searchProducts(this.value, 'manual');" placeholder="Pesquise aqui."></div>
+            </div-->
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="content">
+          <div class="text">Audi. Todos os direitos reservados &copy; &reg; &trade; 2018.</div>
+          <div class="spacer"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+function toggleSidebar(){
+  if(document.querySelector(".sidebar").style.left=="-250px"){
+    document.querySelector(".sidebar").style.left="0px";
+    document.querySelector(".products").style.marginLeft="250px";
+  } else {
+    document.querySelector(".sidebar").style.left="-250px";
+    document.querySelector(".products").style.marginLeft="0px";
+  }
+}
+function AddProduct(Product) {
+  var productHTML = "";
+  productHTML += '<div class="product" id="product-'+Product.id+'" data-product-tags="'+Product.tags+'" style="display:none;" onclick="ProductPage(\''+Product.id+'\');">';
+  productHTML += '  <div class="product-image-blur" style="background-image: url(\''+Product.image+'\');">';
+  productHTML += '    <div class="product-image" style="background-image: url(\''+Product.image+'\');"></div>';
+  productHTML += '  </div>';
+  productHTML += '  <div class="product-details">';
+  productHTML += '    <div class="product-text">';
+  productHTML += '      <h1>'+Product.name+'</h1>';
+  productHTML += '    </div>';
+  productHTML += '    <div class="product-text">';
+  productHTML += '      <p>'+Product.details+'</p>';
+  productHTML += '    </div>';
+  productHTML += '    <h3 class="product-price">'+Product.price+'</h3>';
+  productHTML += '  </div>';
+  productHTML += '</div>';
+  document.querySelector(".products").innerHTML+=productHTML;
+}
+var products = new Array();
+var productCount = 0;
+function Product(name, details, price, image, tags) {
+  this.id = productCount++;
+  this.name = name;
+  this.details = details;
+  this.price = price;
+  this.image = image;
+  this.tags = tags.toUpperCase()+",";
+  products.push(this);
+}
+function AddSearchSuggestions(display, value) {
+  searchSuggestionHTML = "";
+  searchSuggestionHTML += '<li>';
+  searchSuggestionHTML += '  <a href="#" onclick="searchProducts(\''+value+'\');">'+display+'</a>';
+  searchSuggestionHTML += '</li>';
+  document.querySelector(".searchMenu").innerHTML += searchSuggestionHTML;
+
+}
+function searchProducts(tag, type){
+  if(type!="manual") {
+    tag = tag+",";
+  }
+  if(tag==""){
+    tag = "Audi";
+  }
+  tag = tag.toUpperCase();
+  var searchArea = document.querySelector(".products");
+  var allProducts = searchArea.querySelectorAll(".product");
+  for(var i=0;i<allProducts.length;i++){
+    allProducts[i].style.display = "none";
+  }
+  var findProducts = searchArea.querySelectorAll("div[data-product-tags*=\""+tag+"\"]");
+  var findProductCount = 0;
+  for(var i=0;i<findProducts.length;i++){
+    findProducts[i].style.display = "inline-block";
+    findProductCount++;
+  }
+  if(findProductCount==0){
+    searchArea.querySelector(".noProductsFound").style.display = "block";
+  } else {
+    searchArea.querySelector(".noProductsFound").style.display = "none";
+  }
+}
+function ProductPage(productId){
+  alert("Aguarde...\nEstamos redirecionando você para a página do produto...\nPara cancelar o redirecionamento, clique em OK ou feche esse alert.");
+  alert("Redirecionamento cancelado.");
+}
+function alphaOnly(event) {
+  var key = event.keyCode;
+  return ((key >= 65 && key <= 90) || (key >= 96 && key <= 105)  || (key >= 37 && key <= 40) || key == 8 || key == 46 || key == 16 || key == 177 || key == 116);
+};
+function RandomPrice() {
+  var million = Math.floor(Math.random()*2);
+  if(million==0){
+    million = "";
+  } else {
+    million = million+".";
+  }
+  return "R$ "+million+(Math.floor(Math.random()*900)+100)+"."+(Math.floor(Math.random()*900)+100)+","+(Math.floor(Math.random()*90)+10);
+}
+function ready(){
+  var det = "Audi AG é uma empresa automobilística alemã que faz parte do grupo Volkswagen. O grupo Audi AG ainda inclui a Lamborghini e a Ducati.";
+  AddProduct(new Product("Audi A1", det, RandomPrice(), "./img/a1.jpg", "Audi,A,A1"));
+  AddProduct(new Product("Audi A3", det, RandomPrice(), "./img/a3.jpg", "Audi,A,A3"));
+  AddProduct(new Product("Audi A4", det, RandomPrice(), "./img/a4.jpg", "Audi,A,A4"));
+  AddProduct(new Product("Audi A5", det, RandomPrice(), "./img/a5.jpg", "Audi,A,A5"));
+  AddProduct(new Product("Audi A6", det, RandomPrice(), "./img/a6.jpg", "Audi,A,A6"));
+  AddProduct(new Product("Audi A7", det, RandomPrice(), "./img/a7.jpg", "Audi,A,A7"));
+  AddProduct(new Product("Audi Q3", det, RandomPrice(), "./img/q3.jpg", "Audi,Q,Q3"));
+  AddProduct(new Product("Audi Q5", det, RandomPrice(), "./img/q5.jpg", "Audi,Q,Q5"));
+  AddProduct(new Product("Audi Q7", det, RandomPrice(), "./img/q7.jpg", "Audi,Q,Q7"));
+  AddProduct(new Product("Audi TT", det, RandomPrice(), "./img/tt.jpg", "Audi,TOP,TT"));
+  AddProduct(new Product("Audi RS", det, RandomPrice(), "./img/rs.jpg", "Audi,TOP,RS"));
+  AddProduct(new Product("Audi TOP", "- TOP?<br>- TOP!<br>- Então tá top!<br>- É, então tá top!<br>- Se tá jóia, então tá top, concorda comigo?", "Quinta-Feira", "./img/top.jpg", "LIMITED_EDITION"));
+  AddProduct(new Product("Audi LOL", "- Ei, bora jogar?<br>- Bora!<br>- Vamos para o laboratório!<br>Qual lane você vai?<br>- TOOOOOPP!", RandomPrice(), "./img/lol.jpg", "LIMITED_EDITION"));
+  AddSearchSuggestions("Todos", "Audi");
+  AddSearchSuggestions("Audi A", "A");
+  AddSearchSuggestions("Audi Q", "Q");
+  AddSearchSuggestions("Audi TOP", "TOP");
+  AddSearchSuggestions("Edição Limitada", "LIMITED_EDITION");
+  /*
+  AddSearchSuggestions("Audi A1", "A1");
+  AddSearchSuggestions("Audi A3", "A3");
+  AddSearchSuggestions("Audi A4", "A4");
+  AddSearchSuggestions("Audi A5", "A5");
+  AddSearchSuggestions("Audi A6", "A6");
+  AddSearchSuggestions("Audi A7", "A7");
+  AddSearchSuggestions("Audi Q3", "Q3");
+  AddSearchSuggestions("Audi Q5", "Q5");
+  AddSearchSuggestions("Audi Q7", "Q7");
+  AddSearchSuggestions("Audi TT", "TT");
+  AddSearchSuggestions("Audi RS", "RS");
+  */
+  searchProducts("Audi");
+}
+    </script>
+  </body>
+</html>
